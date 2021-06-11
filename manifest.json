@@ -1,0 +1,19 @@
+{
+  "short_name": "Snow Day Calculator",
+  "name": "Avon Lake High School Snow Day Calculator",
+  "icons": [
+    {
+      "src": "/images/icons-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/icons-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "description": "Snow Day Prediction Engine for Avon Lake High School"
+}
