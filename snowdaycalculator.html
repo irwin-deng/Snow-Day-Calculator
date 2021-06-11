@@ -1,0 +1,678 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/manifest.json">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="theme-color" content="#ffffff">
+        <meta charset="UTF-8">
+        <title>Snow Day Calculator</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+    <style>
+        table{
+            border-collapse: collapse;
+        }
+
+        td, th {
+            border: 1px solid black;
+            text-align: center;
+            padding: 8px;
+        }
+    </style>
+    <body>
+        <form action="" id="inputter" onsubmit="return go();">
+            <fieldset>
+                <legend>Irwin's Snow Day Calculator</legend>
+                <p>
+                    School closings up to today:
+                    <input type="text"  id="yc">
+                </p>
+                <p>
+                    Consecutive school closings (up to today):
+                    <input type="text"  id="cc">
+                </p>
+                <input type="submit" name="submit" value="Go!">
+                </p>
+
+            <table>
+                <tr>
+                    <th colspan=3>Predicted School Closing Probabilities</th>
+                </tr>
+                <tr>
+                    <td style="min-width:300px"><p id="date1"></p></td>
+                    <td style="min-width:100px"><span style="font-weight: bold;" id="prob1">—</span></td>
+                    <td style="min-width:50px"><button id="revealer1" onclick="return toggleData(1)">Show weather data</button></td>
+                </tr>
+                <tr>
+                    <td><p id="date2"></p></td>
+                    <td><span style="font-weight: bold;" id="prob2">—</span></td>
+                    <td><button id="revealer2" onclick="return toggleData(2)">Show weather data</button></td>
+                </tr>
+                <tr>
+                    <td><p id="date3"></p></td>
+                    <td><span style="font-weight: bold;" id="prob3">—</span></td>
+                    <td><button id="revealer3" onclick="return toggleData(3)">Show weather data</button></td>
+                </tr>
+                <tr>
+                    <td><p id="date4"></p></td>
+                    <td><span style="font-weight: bold;" id="prob4">—</span></td>
+                    <td><button id="revealer4" onclick="return toggleData(4)">Show weather data</button></td>
+                </tr>
+                <tr>
+                    <td><p id="date5"></p></td>
+                    <td><span style="font-weight: bold;" id="prob5">—</span></td>
+                    <td><button id="revealer5" onclick="return toggleData(5)">Show weather data</button></td>
+                </tr>
+                <tr>
+                    <td><p id="date6"></p></td>
+                    <td><span style="font-weight: bold;" id="prob6">—</span></td>
+                    <td><button id="revealer6" onclick="return toggleData(6)">Show weather data</button></td>
+                </tr>
+            </table>
+
+            <p></p>
+            <table id="hidableData">
+                <tr>
+                    <th colspan="6"><span id=tableDate></span><br><span>(You can change values to get a hypothetical probability)</span></th>
+                    <th rowspan="2"><button id="goMod" onclick="return getModProb()">Recalculate</button><br><span id="modProb"></span></th>
+                </tr>
+                <tr>
+                    <td>Hour</td>
+                    <td>Temperature (ºF)</td>
+                    <td>Feels Like (ºF)</td>
+                    <td>Conditions</td>
+                    <td>Precip Intensity (in/hr)</td>
+                    <td>Accumulation (in)</td>
+                </tr>
+                <tr>
+                    <td>12 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data0"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data0"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data0"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data0"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data0"></span></div></td>
+                </tr>
+                <tr>
+                    <td>1 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data1"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data1"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data1"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data1"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data1"></span></div></td>
+                </tr>
+                <tr>
+                    <td>2 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data2"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data2"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data2"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data2"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data2"></span></div></td>
+                </tr>
+                <tr>
+                    <td>3 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data3"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data3"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data3"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data3"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data3"></span></div></td>
+                </tr>
+                <tr>
+                    <td>4 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data4"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data4"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data4"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data4"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data4"></span></div></td>
+                </tr>
+                <tr>
+                    <td>5 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data5"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data5"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data5"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data5"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data5"></span></div></td>
+                </tr>
+                <tr>
+                    <td>6 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data6"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data6"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data6"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data6"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data6"></span></div></td>
+                </tr>
+                <tr>
+                    <td>7 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data7"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data7"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data7"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data7"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data7"></span></div></td>
+                </tr>
+                <tr>
+                    <td>8 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data8"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data8"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data8"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data8"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data8"></span></div></td>
+                </tr>
+                <tr>
+                    <td>9 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data9"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data9"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data9"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data9"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data9"></span></div></td>
+                </tr>
+                <tr>
+                    <td>10 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data10"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data10"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data10"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data10"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data10"></span></div></td>
+                </tr>
+                <tr>
+                    <td>11 am</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data11"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data11"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data11"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data11"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data11"></span></div></td>
+                </tr>
+                <tr>
+                    <td>12 pm</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data12"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data12"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data12"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data12"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data12"></span></div></td>
+                </tr>
+                <tr>
+                    <td>1 pm</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data13"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data13"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data13"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data13"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data13"></span></div></td>
+                </tr>
+                <tr>
+                    <td>2 pm</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data14"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data14"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data14"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data14"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data14"></span></div></td>
+                </tr>
+                <tr>
+                    <td>3 pm</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data15"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data15"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data15"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data15"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data15"></span></div></td>
+                </tr>
+                <tr>
+                    <td>4 pm</td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="0data16"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="1data16"></span></div></td>
+                    <td><span style="font-weight: bold;" id="2data16"></span></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="3data16"></span></div></td>
+                    <td><div contenteditable><span style="font-weight: bold;" id="4data16"></span></div></td>
+                </tr>
+            </table>
+            <p><br></p>
+            <p>This snow day calculator was created by analyzing ALCS school closing data since the start of the 2014-2015 school year. It predicts snow and cold days, but not ice days. Because Bob Scott can be really unpredictable at times, don't expect this to be 100% accurate.<br>Please refrain from spamming the shit out of the "Go!" button because it has feelings but mainly because the weather API used in this calculator only allows 1,000 requests per day.</p>
+            <br>
+            <p>What's new?</p>
+            <p>Version 3.0.0</p>
+            -Wunderground got rid of its free API (I can gain access for the low, low price of $850/month), so I had to switch back to the Dark Sky API.<br>
+            <p>Version 2.1.0</p>
+            - Improved algorithm to factor in uncertainty in forecasts in distant future<br>
+            <p>Version 2.0.0</p>
+            - Added table output (no more individually inputting dates)<br>
+            - Added hypothetical calculations (show weather data -> edit weather data table)
+            </fieldset>
+        </form>
+    <a href="https://darksky.net/poweredby/">Powered by Dark Sky</a>
+    <br><br>
+    <a href="http://projects.alwiki.net">Back to all projects</a>
+
+    <script>
+        $(function() {
+            document.getElementById("hidableData").style.display="none";
+            for(i=1; i<7; i++){
+                document.getElementById("revealer"+i).style.display="none";
+                document.getElementById("date"+i).style.display="none";
+                document.getElementById("prob"+i).style.display="none";
+            }
+            var weekdays = new Array(7);
+            weekdays[0] = "Sunday&nbsp&nbsp";
+            weekdays[1] = "Monday&nbsp&nbsp";
+            weekdays[2] = "Tuesday&nbsp&nbsp";
+            weekdays[3] = "Wednesday&nbsp&nbsp";
+            weekdays[4] = "Thursday&nbsp&nbsp";
+            weekdays[5] = "Friday&nbsp&nbsp";
+            weekdays[6] = "Saturday&nbsp&nbsp";
+
+            var today = new Date();
+            var now = new Date();
+            now.setUTCHours(now.getUTCHours(),0);
+            var date = new Date();
+            date.setUTCHours(3);
+
+            for(i=1; i<7; i++) {
+                date.setDate(date.getDate()+1);
+                while(date.getDay()==6 || date.getDay()==0) {
+                    date.setDate(date.getDate()+1);
+                }
+                if (Math.floor(date.getTime()/1000) + 57600 > Math.floor(now.getTime()/1000) + 604800) {
+                    break;
+                }
+
+                dates[i] = new Date(date.getFullYear(),date.getMonth(),date.getDate());
+                document.getElementById("date"+i).innerHTML = weekdays[date.getDay()] + (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+                document.getElementById("date"+i).style.display="block";
+                document.getElementById("prob"+i).style.display="block";
+            }
+        });
+        var dates=[];
+        var firstHour;
+        var dataa;
+        var probs=[];
+        var yearClosings;
+        var consecutiveClosings;
+        var mod=-.1;
+        var now = new Date();
+
+        function go() {
+            for(n=1; n<dates.length; n++) {
+                document.getElementById("prob"+n).innerHTML = "Calculating... Please Wait";
+            }
+            var today = new Date();
+            today.setUTCHours(5)
+            //var timestamp = Math.floor(today.getTime()/1000);
+            //var sevenAMTimestamp = timestamp + 25200;
+            var proxy = "https://cors-anywhere.herokuapp.com/";
+            var url = proxy + "https://api.darksky.net/forecast/aeee0c17ca18fc3d54d4c0ea16d45c6c/41.5083,-82.0166?units=us&exclude=daily,minutely,alerts,flags&extend=hourly";
+            $.ajax({
+                url: url,
+                dataType: "json",
+                success: function(data) {
+                        
+                    dataa = data;
+                    firstHour = parseFloat(`${data.hourly.data[0].time}`);
+                    yearClosings = document.forms["inputter"].elements["yc"].value;
+                    consecutiveClosings = document.forms["inputter"].elements["cc"].value;
+
+                    for(n=1; n<dates.length; n++) {
+                        var timestamp = Math.floor(dates[n].getTime()/1000);
+
+                        var m=0;        //hour addition
+                        var t=0;        //temp factor
+                        var p=0;        //precip factor
+                        var temp = [];
+                        var feels = [];
+                        var precipType = [];
+                        var precipIntensity = [];
+                        var precipAccum = [];
+                        m=(timestamp-firstHour)/3600;
+                        if(i+16>168) {
+                            break;
+                        }
+                        for(i=0; i<17; i++) {
+                            temp[i] = parseFloat(`${data.hourly.data[i+m].temperature}`);
+                            feels[i] = parseFloat(`${data.hourly.data[i+m].apparentTemperature}`);
+                            if('precipType' in data.hourly.data[i+m]) {
+                                precipType[i] = (`${data.hourly.data[i+m].precipType}`);
+                            } else {
+                                precipType[i] = '';
+                            }
+                            precipIntensity[i] = parseFloat(`${data.hourly.data[i+m].precipIntensity}`);
+                            precipAccum[i] = parseFloat(`${dataa.hourly.data[i+m].precipAccumulation}` === "undefined" ? 0 : `${dataa.hourly.data[i+m].precipAccumulation}`);
+                        }
+                        for(i=0; i<17; i++) {
+                            var snow = precipAccum[i] + precipIntensity[i] * (`${data.hourly.data[i+m].precipType}` === "snow" || `${data.hourly.data[i+m].precipType}` === "sleet" ? 1 : 0);
+                            if(i<3 || (8<i && i<14))
+                                p+=.01*snow;
+                            else if((2<i && i<6) || i>13)
+                                p+=.06*snow;
+                            else
+                                p+=.19*snow;
+
+                            t+=.01*temp[i]
+                            if(i==6 || i==14 || i==15)
+                                t+=.08*feels[i];
+                            else if(i==7)
+                                t+=.36*feels[i];
+                            else if(i==8)
+                                t+=.28*feels[i];
+                        }
+                        var time = (dates[n].getTime() - now.getTime())/86400000;
+                        p=(p+time*.003/21)/(1+time/21);
+                        t=(t+time*30/21)/(1+time/21);
+                        var baseProb = 1/(1+1/(2**(1-t)+10**(p-.3)-.50118723362727));
+                        var meanYC = Number(yearClosings);
+                        for(i=1; i<n; i++) {
+                            meanYC+=probs[i];
+                        }
+                        var closingMod = -1*Math.atan(2*(consecutiveClosings+meanYC)-3)/(2*Math.PI)+.80120819117478;
+                        var prob = baseProb*(1-(1-baseProb)*(1-closingMod));
+                        probs[n]=prob;
+                        if(prob >=.0001 && prob <=.9999) {
+                            document.getElementById("prob"+n).innerHTML = (prob*100).toFixed(2) + "%";
+                        } else if(prob > .9999) {
+                            document.getElementById("prob"+n).innerHTML = "> 99.99%"
+                        } else {
+                            document.getElementById("prob"+n).innerHTML = "< 0.01%"
+                        }
+                        document.getElementById("revealer"+n).style.display="block";
+                    }
+                }
+            });
+            return false;
+        }
+
+        var toggledOn=0;
+        function toggleData(i) {
+            if(toggledOn==0) {
+                fillWithData(i);
+                document.getElementById("revealer"+i).innerHTML = "Hide weather data";
+                toggledOn=i;
+                document.getElementById("hidableData").style.display="block";
+            } else if(toggledOn==i) {
+                document.getElementById("revealer"+i).innerHTML = "Show weather data";
+                toggledOn=0;
+                document.getElementById("hidableData").style.display="none";
+            } else {
+                fillWithData(i);
+                document.getElementById("revealer"+toggledOn).innerHTML = "Show weather data";
+                document.getElementById("revealer"+i).innerHTML = "Hide weather data";
+                toggledOn=i;
+            }
+            return false;
+        }
+
+        function fillWithData(i) {
+            var timestamp = Math.floor(dates[i].getTime()/1000);
+            var m=(timestamp-firstHour)/3600;
+            document.getElementById("tableDate").innerHTML = "Weather data for " + (dates[i].getMonth() + 1) + '/' + dates[i].getDate() + '/' + dates[i].getFullYear();
+
+            for(i=0;i<17;i++) {
+                document.getElementById("0data"+i).innerHTML=`${dataa.hourly.data[i+m].temperature}`;
+                document.getElementById("1data"+i).innerHTML=`${dataa.hourly.data[i+m].apparentTemperature}`;
+                document.getElementById("2data"+i).innerHTML=`${dataa.hourly.data[i+m].summary}`;
+                document.getElementById("3data"+i).innerHTML=`${dataa.hourly.data[i+m].precipIntensity}`;
+                
+                document.getElementById("4data"+i).innerHTML= `${dataa.hourly.data[i+m].precipAccumulation}` === "undefined" ? 0 : `${dataa.hourly.data[i+m].precipAccumulation}`;
+            }
+            return false;
+
+        }
+
+        function getModProb() {
+            var temp = [];
+            var feel = [];
+            var precipIntensity = [];
+            var precipAccum = [];
+            var snow = [];
+            for(i=0;i<17;i++) {
+                temp[i] = parseFloat(document.getElementById("0data"+i).innerHTML);
+                feel[i] = parseFloat(document.getElementById("1data"+i).innerHTML);
+                precipIntensity[i] = parseFloat(document.getElementById("3data"+i).innerHTML);
+                precipAccum[i] = parseFloat(document.getElementById("4data"+i).innerHTML);
+            }
+            var t=0;
+            var p=0;
+            
+            var timestamp = Math.floor(dates[toggledOn].getTime()/1000);
+            var m=(timestamp-firstHour)/3600;
+
+            for(i=0; i<17; i++) {
+                var snow = precipAccum[i] + precipIntensity[i] * (`${dataa.hourly.data[i+m].precipType}` !== "undefined" && (`${dataa.hourly.data[i+m].precipType}` === "snow" || `${dataa.hourly.data[i+m].precipType}` === "sleet") ? 1.0 : 0.0);
+                if(i<3 || (8<i && i<14))
+                    p+=.01*snow;
+                else if((2<i && i<6) || i>13)
+                    p+=.06*snow;
+                else
+                    p+=.19*snow;
+
+                t+=.01*temp[i]
+                if(i==6 || i==14 || i==15)
+                    t+=.08*feel[i];
+                else if(i==7)
+                    t+=.36*feel[i];
+                else if(i==8)
+                    t+=.28*feel[i];
+            }
+            var time = (dates[toggledOn].getTime() - now.getTime())/86400000;
+            p=(p+time*.003/21)/(1+time/21);
+            t=(t+time*30/21)/(1+time/21);
+            var baseProb = 1/(1+1/(2**(1-t)+10**(p-.3)-.50118723362727));
+            var meanYC = Number(yearClosings);
+            for(i=1; i<toggledOn; i++) {
+                meanYC+=probs[i];
+            }
+            var closingMod = -1*Math.atan(2*(consecutiveClosings+meanYC)-3)/(2*Math.PI)+.80120819117478;
+            var prob = baseProb*(1-(1-baseProb)*(1-closingMod));
+            if(prob >=.0001 && prob <=.9999) {
+                document.getElementById("modProb").innerHTML = (prob*100).toFixed(2) + "%";
+            } else if(prob > .9999) {
+                document.getElementById("modProb").innerHTML = "> 99.99%"
+            } else {
+                document.getElementById("modProb").innerHTML = "< 0.01%"
+            }
+            return false;
+        }
+    </script>
+    </body>
+</html>
